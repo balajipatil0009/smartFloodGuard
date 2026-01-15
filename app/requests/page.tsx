@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { db } from '../../lib/firebase';
 import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 
@@ -10,6 +11,8 @@ interface HelpRequest {
     longitude: number;
     timestamp: Timestamp;
     status: string;
+    user_name?: string;
+    user_email?: string;
 }
 
 export default function RequestsPage() {
@@ -58,6 +61,8 @@ export default function RequestsPage() {
                     <thead className="bg-gray-100 dark:bg-zinc-800">
                         <tr>
                             <th className="py-3 px-6 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Date/Time</th>
+                            <th className="py-3 px-6 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">User</th>
+                            <th className="py-3 px-6 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Email</th>
                             <th className="py-3 px-6 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Status</th>
                             <th className="py-3 px-6 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Location (Lat, Lng)</th>
                             <th className="py-3 px-6 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Action</th>
@@ -68,6 +73,12 @@ export default function RequestsPage() {
                             <tr key={req.id}>
                                 <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                     {req.timestamp?.toDate().toLocaleString() || 'N/A'}
+                                </td>
+                                <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                    {req.user_name || 'Anonymous'}
+                                </td>
+                                <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                    {req.user_email || 'N/A'}
                                 </td>
                                 <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${req.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
@@ -90,7 +101,7 @@ export default function RequestsPage() {
                         ))}
                         {requests.length === 0 && (
                             <tr>
-                                <td colSpan={4} className="py-4 px-6 text-center text-gray-500">
+                                <td colSpan={6} className="py-4 px-6 text-center text-gray-500">
                                     No requests found.
                                 </td>
                             </tr>

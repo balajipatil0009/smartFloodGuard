@@ -281,3 +281,7 @@ body {
 .btn-sm-map:hover {
   background-color: var(--primary-hover);
 }
+
+.hover:hover {
+  background-color: gray;
+}
